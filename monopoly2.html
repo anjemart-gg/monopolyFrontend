@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<head>
+    <script>
+        var spaceSize = 69;
+        var die1 = 0;
+        var die2 = 0;
+        var doubleCount = 0;
+        var groupingColors = [
+            '#41009c',
+            '#71d8e3',
+            '#ff3d9e',
+            '#fc721c',
+            '#ff0000',
+            '#fffb00',
+            '#13a600',
+            '#00458f',
+        ];
+        var curPlayer = null;
+        
+        var spaces = [
+            {
+                name: 'GO',
+                top: 10*spaceSize,
+                left: 10*spaceSize,
+                id:1
+            },
+            {
+                name: 'Mediterranian Avenue',
+                top: 10*spaceSize,
+                left: 9*spaceSize,
+                id:2,
+                grouping:0,
+                price:60,
+                owner:null,
+                houseCount:0,
+                landPrice: [2,10,30,90,160,250],
+                mortgage: 30
+            },
+            {
+                name: 'Community Chest',
+                top: 10*spaceSize,
+                left: 8*spaceSize,
+                id:3
+            },
+            {
+                name: 'Baltic Avenue',
+                top: 10*spaceSize,
+                left: 7*spaceSize,
+                id:4,
+                grouping:0,
+                price:60,
+                owner:null,
+                houseCount:0,
+                landPrice: [20,60,180,320,450],
+                mortgage: 30
+            },
+            {
+                name: 'Income Tax',
+                top: 10*spaceSize,
+                left: 6*spaceSize,
+                id:5
+            },
+            {
+                name: 'Reading Railroad',
+                top: 10*spaceSize,
+                left: 5*spaceSize,
+                id:6,
+                price:200,
+                owner:null,
+                mortgage: 30
+            },
+            {
+                name: 'Oriental Avenue',
+                top: 10*spaceSize,
+                left: 4*spaceSize,
+                id:7,
+                grouping:1,
+                price:100,
+                owner:null,
+                houseCount:0,
+                landPrice: [30,90,270,400,550],
+                mortgage: 30
+            },
+            {
+                name: 'Chance',
+                top: 10*spaceSize,
+                left: 3*spaceSize,
+                id:8
+            },
+            {
+                name: 'Vermont Avenue',
+                top: 10*spaceSize,
+                left: 2*spaceSize,
+                id:9,
+                grouping:1,
+                price:100,
+                owner:null,
+                houseCount:0,
+                landPrice: [30,90,270,400,550],
+                mortgage: 30
+            },
+            {
+                name: 'Connecticut Avenue',
+                top: 10*spaceSize,
+                left: 1*spaceSize,
+                id:10,
+                grouping:1,
+                price:120,
+                owner:null,
+                houseCount:0,
+                landPrice: [40,100,300,450,600],
+                mortgage: 30
+            },
+            {
+                name: 'Jail',
+                top: 10*spaceSize,
+                left: 0*spaceSize,
+                id:11
+            },
+            {
+                name: 'St. Charles Place',
+                top: 9*spaceSize,
+                left: 0*spaceSize,
+                id:12,
+                grouping:2,
+                price:140,
+                owner:null,
+                houseCount:0,
+                landPrice: [50,150,450,625,750],
+                mortgage: 30
+            },
+            {
+                name: 'Electric Company',
+                top: 8*spaceSize,
+                left: 0*spaceSize,
+                id:13,
+                price:150,
+                owner:null,
+                mortgage: 30
+            },
+            {
+                name: 'States Avenue',
+                top: 7*spaceSize,
+                left: 0*spaceSize,
+                id:14,
+                grouping:2,
+                price:140,
+                owner:null,
+                houseCount:0,
+                landPrice: [50,150,450,625,750],
+                mortgage: 30
+            },
+            {
+                name: 'Virginia Avenue',
+                top: 6*spaceSize,
+                left: 0*spaceSize,
+                id:15,
+                grouping:2,
+                price:160,
+                owner:null,
+                houseCount:0,
+                landPrice: [60,180,500,700,900],
+                mortgage: 30
+            },
+            {
+                name: 'Pennsylvania Railroad',
+                top: 5*spaceSize,
+                left: 0*spaceSize,
+                id:16,
+                price:200,
+                owner:null,
+                mortgage: 30
+            },
+            {
+                name: 'St. James Place',
+                top: 4*spaceSize,
+                left: 0*spaceSize,
+                id:17,
+                grouping:3,
+                price:180,
+                owner:null,
+                houseCount:0,
+                landPrice: [70,200,550,750,950],
+                mortgage: 30
+            },
+            {
+                name: 'Community Chest',
+                top: 3*spaceSize,
+                left: 0*spaceSize,
+                id:18
+            },
+            {
+                name: 'Tennessee Place',
+                top: 2*spaceSize,
+                left: 0*spaceSize,
+                id:19,
+                grouping:3,
+                price:180,
+                owner:null,
+                houseCount:0,
+                landPrice: [70,200,550,750,950],
+                mortgage: 30
+            },
+            {
+                name: 'New York Avenue',
+                top: 1*spaceSize,
+                left: 0*spaceSize,
+                id:20,
+                grouping:3,
+                price:200,
+                owner:null,
+                houseCount:0,
+                landPrice: [80,220,600,800,1000],
+                mortgage: 30
+            },
+            {
+                name: 'Free Parking',
+                top: 0*spaceSize,
+                left: 0*spaceSize,
+                id:21
+            },
+            {
+                name: 'Kentucky Avenue',
+                top: 0*spaceSize,
+                left: 1*spaceSize,
+                id:22,
+                grouping:4,
+                price:220,
+                owner:null,
+                houseCount:0,
+                landPrice: [90,250,700,875,1050],
+                mortgage: 30
+            },
+            {
+                name: 'Chance',
+                top: 0*spaceSize,
+                left: 2*spaceSize,
+                id:23
+            },
+            {
+                name: 'Indiana Avenue',
+                top: 0*spaceSize,
+                left: 3*spaceSize,
+                id:24,
+                grouping:4,
+                price:220,
+                owner:null,
+                houseCount:0,
+                landPrice: [90,250,700,875,1050],
+                mortgage: 30
+            },
+            {
+                name: 'Illinois Avenue',
+                top: 0*spaceSize,
+                left: 4*spaceSize,
+                id:25,
+                grouping:4,
+                price:240,
+                owner:null,
+                houseCount:0,
+                landPrice: [100,300,750,925,1100],
+                mortgage: 30
+            },
+            {
+                name: 'B&O Railroad',
+                top: 0*spaceSize,
+                left: 5*spaceSize,
+                id:26,
+                price:200,
+                owner:null,
+                mortgage: 30
+            },
+            {
+                name: 'Atlantic Avenue',
+                top: 0*spaceSize,
+                left: 6*spaceSize,
+                id:27,
+                grouping:5,
+                price:260,
+                owner:null,
+                houseCount:0,
+                landPrice: [110,330,800,975,1150],
+                mortgage: 30
+            },
+            {
+                name: 'Ventnor Avenue',
+                top: 0*spaceSize,
+                left: 7*spaceSize,
+                id:28,
+                grouping:5,
+                price:260,
+                owner:null,
+                houseCount:0,
+                landPrice: [110,330,800,975,1150],
+                mortgage: 30
+            },
+            {
+                name: 'Water Works',
+                top: 0*spaceSize,
+                left: 8*spaceSize,
+                id:29,
+                price:150,
+                owner:null,
+                mortgage: 30
+            },
+            {
+                name: 'Marvin Gardens',
+                top: 0*spaceSize,
+                left: 9*spaceSize,
+                id:30,
+                grouping:5,
+                price:280,
+                owner:null,
+                houseCount:0,
+                landPrice: [120,360,850,1025,1200],
+                mortgage: 30
+            },
+            {
+                name: 'Go To Jail',
+                top: 0*spaceSize,
+                left: 10*spaceSize,
+                id:31
+            },
+            {
+                name: 'Pacific Avenue',
+                top: 1*spaceSize,
+                left: 10*spaceSize,
+                id:32,
+                grouping:6,
+                price:300,
+                owner:null,
+                houseCount:0,
+                landPrice: [130,390,900,1100,1275],
+                mortgage: 30
+            },
+            {
+                name: 'North Carolina Avenue',
+                top: 2*spaceSize,
+                left: 10*spaceSize,
+                id:33,
+                grouping:6,
+                price:300,
+                owner:null,
+                houseCount:0,
+                landPrice: [130,390,900,1100,1275],
+                mortgage: 30
+            },
+            {
+                name: 'Community Chest',
+                top: 3*spaceSize,
+                left: 10*spaceSize,
+                id:34
+            },
+            {
+                name: 'Pennsylvania Avenue',
+                top: 4*spaceSize,
+                left: 10*spaceSize,
+                id:35,
+                grouping:6,
+                price:320,
+                owner:null,
+                houseCount:0,
+                landPrice: [450,1000,1200,1400],
+                mortgage: 30
+            },
+            {
+                name: 'Short Line',
+                top: 5*spaceSize,
+                left: 10*spaceSize,
+                id:36,
+                price:200,
+                owner:null,
+                mortgage: 30
+            },
+            {
+                name: 'Chance',
+                top: 6*spaceSize,
+                left: 10*spaceSize,
+                id:37
+            },
+            {
+                name: 'Park Place',
+                top: 7*spaceSize,
+                left: 10*spaceSize,
+                id:38,
+                grouping:7,
+                price:350,
+                owner:null,
+                houseCount:0,
+                landPrice: [500,1100,1300,1500],
+                mortgage: 30
+            },
+            {
+                name: 'Luxury Tax',
+                top: 8*spaceSize,
+                left: 10*spaceSize,
+                id:39
+            },
+            {
+                name: 'Boardwalk',
+                top: 9*spaceSize,
+                left: 10*spaceSize,
+                id:40,
+                grouping:7,
+                price:400,
+                owner:null,
+                houseCount:0,
+                landPrice: [200,600,1400,1700,2000],
+                mortgage: 30
+            },
+        ];
+        function createSquare(space){
+            if(space.id < 11){
+                var rotationText = '';
+            }
+            else if(space.id < 21){
+                var rotationText = 'transform: rotate(90deg);';
+            }
+            else if(space.id < 31){
+                var rotationText = 'transform: rotate(180deg);';
+            }
+            else{
+                var rotationText = 'transform: rotate(270deg);';
+            }
+            var divText = '<div id="'+space.id+'" style="'+rotationText+'border:1px solid black;position:absolute;height:'+spaceSize+'px;width:'
+                +spaceSize+'px;top:'+space.top+'px;left:'+space.left+'px;overflow-wrap: break-word; font-size:12px;text-align: center;">';
+            if(typeof(space.grouping) != 'undefined'){
+                var divOrientation = 'height:30%; width:97%;';
+                
+                divText += '<div style=" border: 1px solid black; overflow: none;'+divOrientation+' background-color:'+groupingColors[space.grouping]+';"></div>'
+            }
+            divText += space.name+'</div>';
+            document.getElementById('body').innerHTML += divText;
+        }
+        function Player(name,dispName,offset,color,playerIndex){
+            this.space = 0;
+            this.name = name;
+            this.dispName = dispName;
+            this.offset = offset;
+            this.bank = 1500;
+            this.ownedSpaces = [];
+            this.color = color;
+            this.jailDelay = 0;
+            this.inJail = false;
+            this.playerPiece = '<div id="'+name+'" style="border: 1px solid black; width:10px;height:10px; position:absolute;left:'
+                +(spaces[0].left + offset)+'px;top:'
+                +(spaces[0].top + spaceSize/2)+'px;background-color:'+color.toString()+';"></div>';
+            this.bankrollInfo = '<div id="'+name+'Bankroll"'
+            +'style="border: 1px solid black; width:'+spaceSize*5+'px;height:'+spaceSize+'px; position:absolute;left:'
+            +spaceSize*12+'px;top:'
+            +spaceSize*(playerIndex+3)+'px;background-color:'+color.toString()+';"'
+            +'>'+dispName+': '+this.bank+'</div>'
+        }
+        var playerDistance = 5;
+        var playerNumber = 0;
+        var players = [];
+        players.push(new Player('player1','Player 1',playerDistance,'red',0));
+        players.push(new Player('player2','Player 2',(spaceSize/4 + playerDistance),'blue',1));
+        players.push(new Player('player3','Player 3',(spaceSize/4*2 + playerDistance),'yellow',2));
+        players.push(new Player('player4','Player 4',(spaceSize/4*3 + playerDistance),'green',3));
+        function closePropertyDialogue(){
+            document.getElementById('propertyOptions').remove();
+        }
+        function openPropertyDialogue(){
+            var propertyOptionsDiv = '<div id="propertyOptions" style="'
+            +'display:block;border:1px solid black; background-color:#fff2ab; position:absolute; width:'+spaceSize*9+'px; height:'+spaceSize*9+'px; top:'+spaceSize+'px; left:'+spaceSize+'px'
+            +'">'
+            +'<p style="font-size:70px; text-align:center;">Would you like to purchase '+spaces[curPlayer.space].name+'?</p>'
+            +'<button style="width:50%; Height:30%; font-size:50px" onclick="buySpace()">Yes</button>'
+            +'<button style="width:50%; Height:30%; font-size:50px" onclick="closePropertyDialogue()">No</button>'
+            +'</div>'
+            document.getElementById('body').innerHTML += propertyOptionsDiv;
+        }
+        function buySpace(){
+            var space = spaces[curPlayer.space]
+            alterBank(curPlayer,space.price*-1);
+            space.owner = curPlayer.dispName;
+            document.getElementById(curPlayer.space + 1).style.backgroundColor = curPlayer.color;
+            curPlayer.ownedSpaces.push(space.name);
+            //console.log(curPlayer.dispName + ' now has $' + curPlayer.bank);
+            let ownedSpacesText = '';
+            for(let spaceName of curPlayer.ownedSpaces){
+                ownedSpacesText += spaceName + ', '
+            }
+            console.log(curPlayer.dispName + ' now owns ' + ownedSpacesText.substring(0,ownedSpacesText.length - 2) )
+            closePropertyDialogue();
+        }
+        function rollDice(){
+            curPlayer = players[playerNumber%players.length];
+            //testing jail functionality
+            
+            die1 = Math.ceil(Math.random()*6);
+            die2 = Math.ceil(Math.random()*6);
+            document.getElementById('die1').innerHTML = die1;
+            document.getElementById('die2').innerHTML = die2;
+            if(curPlayer.inJail){
+                alert('You are in Jail for ' + player.jailDelay + ' turns. Roll for doubles to get out.');
+                if(die1 == die2){
+                    curPlayer.inJail = false;
+                    alert('You are now out of Jail. So like, enjoy that.');
+                }
+                else{
+                    if(--curPlayer.jailDelay == 0){
+                        curPlayer.inJail = false;
+                    }
+                    playerNumber++;
+                }
+            }
+            if(!curPlayer.inJail){//this looks so stupid but limits the amount of code I need to write for now
+                curPlayer.space += die2 + die1;
+                curPlayer.space = curPlayer.space%40;
+                //document.getElementById('playerspotaudit').innerHTML = curPlayer.dispName + ' - ' + spaces[curPlayer.space].name;//debug
+                movePlayer(curPlayer);
+                landOnProperty(curPlayer);
+                if(die1 == die2){
+                    doubleCount++;
+                    if(doubleCount==3){
+                        alert('Go To Jail');
+                        goToJail(curPlayer);
+                        playerNumber++;
+                        document.getElementById('playerspotaudit').innerHTML = players[playerNumber%players.length].dispName + '\'s Turn!';
+                        curPlayer.inJail = true;
+                    }
+                    else{
+                        alert('Doubles! Roll Again')
+                    }
+                }
+                else{
+                    doubleCount = 0;
+                    playerNumber++;
+                    document.getElementById('playerspotaudit').innerHTML = players[playerNumber%players.length].dispName + '\'s Turn!';
+                }
+            }
+        }
+        function landOnProperty(player){
+            var space = spaces[player.space];
+            if(space.name == 'Go To Jail'){
+                console.log('Go To Jail');
+                goToJail(curPlayer);
+            }
+            else if(typeof(space.price) != 'undefined'){
+                if(space.owner == null){
+                    openPropertyDialogue();
+                }
+                else{
+                    console.log('pay up bitch');
+                    alert('Land Price Test');
+                    var owner = null;
+                    for(let player of players){
+                        if(player.ownedSpaces.indexOf(space.name) > -1){
+                            owner = player;
+                        }
+                    }
+                    var landingPrice = space.landPrice[space.houseCount];
+                    if(landingPrice > curPlayer.bank){
+                        alert(curPlayer.dispName + ' is broke as fuck');
+                    }
+                    else{
+                        alterBank(curPlayer,-1*landingPrice);
+                        alterBank(owner,landingPrice);
+                    }
+                }
+            }
+            else if(space.name == 'Community Chest'){
+                console.log('Draw Community Chest Card');
+            }
+            else if(space.name == 'Chance'){
+                console.log('Draw a Chance card');
+            }
+            else if(space.name == 'Income Tax'){
+                console.log('Income Tax');
+                alert('Income Tax!!')
+                //curPlayer.bank -= 200;
+                alterBank(curPlayer,-200);
+            }
+            else if(space.name == 'Luxury Tax'){
+                console.log('Luxury Tax');
+                alert('Luxury Tax');
+                //curPlayer.bank -= 75;
+                alterBank(curPlayer,-75);
+            }            
+        }
+        function goToJail(player){
+            player.space = 10;
+            movePlayer(player);
+        }
+        //function to allow players to trade. Finish this later
+        function trade(playerNum,curPlayerCash,curPlayerProperties,tradePlayerCash,TradePlayerProperties){
+            var curPlayer = players[playerNumber%players.length];
+            var tradingPlayer = players[playerNum-1];
+
+            curPlayer.bank -= curPlayerCash;
+            tradingPlayer.bank -= tradePlayerCash;
+        }
+        function alterBank(player, amount){
+            player.bank += amount;
+            document.getElementById(player.name+'Bankroll').innerHTML = player.dispName + ': ' + player.bank;
+        }
+        function movePlayer(player){
+            document.getElementById(player.name).style.left = (spaces[player.space].left) + (player.offset)  + 'px';
+            document.getElementById(player.name).style.top = spaces[player.space].top + spaceSize/2 + 'px';
+        }
+        function addUI(){
+            var rollButton = '<button id="rollDice" onclick="rollDice()" style="width: '+spaceSize*2+'px;height: '
+                +spaceSize*2+'px;position: absolute;left: '+spaceSize*8+'px;top: '+spaceSize*8+'px;font-size:30px;">Roll Dice</button>'
+            var diedisp1 = '<div id="die1" style="width: '+spaceSize+'px;height: '
+                +spaceSize+'px;position: absolute;left: '+spaceSize*7+'px;top: '+spaceSize*8+'px;font-size:60px;"></div>';
+            var diedisp2 = '<div id="die2" style="width: '+spaceSize+'px;height: '
+                +spaceSize+'px;position: absolute;left: '+spaceSize*6+'px;top: '+spaceSize*8+'px;font-size:60px;"></div>';
+            var playerspace = '<div id="playerspotaudit" style="width: '+spaceSize+'px;height: '
+                +spaceSize+'px;position: absolute;left: '+spaceSize*2+'px;top: '+spaceSize*2+'px;width:'+spaceSize*9+'px;font-size:60px;">'+players[0].dispName+'\'s Turn!</div>';
+            var playerInformation = '';
+            for(let player of players){
+                playerInformation += player.playerPiece;
+                playerInformation += player.bankrollInfo;
+            }
+            document.getElementById('body').innerHTML += rollButton + diedisp1 + diedisp2 + playerspace + playerInformation;
+        }
+        
+        function setupBoard(){
+            var boardDiv = '<div style="position: absolute; left:0px; top: 0px; width:'+(spaceSize*11+1)+'px; height:'+(spaceSize*11+1)+'px; background-color: #BFDBAE"></div>';
+            document.getElementById('body').innerHTML += boardDiv;
+            for(let space of spaces){
+                createSquare(space);
+            }
+            addUI();
+        }    
+        //need to add this functionality for when someone loses
+        function goBankrupt(){
+            
+        }
+    </script>
+</head>
+<body onload="setupBoard()" id="body" style="background-color: #a9c4bf">
+       
+</body>
