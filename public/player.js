@@ -25,13 +25,7 @@ function buySpace(){
     alterBank(curPlayer,space.price*-1);
     space.owner = curPlayer.dispName;
     document.getElementById(curPlayer.space + 1).style.backgroundColor = curPlayer.color;
-    //curPlayer.ownedSpaces.push(space.name);
-    //let ownedSpacesText = '';
-    //for(let spaceName of curPlayer.ownedSpaces){
-    //    ownedSpacesText += spaceName + ', '
-    //}
     curPlayer.ownedSpaces.push(space);
-    //console.log(curPlayer.dispName + ' now owns ' + ownedSpacesText.substring(0,ownedSpacesText.length - 2) )
     closePropertyDialogue();
 }
 function rollDice(){
@@ -109,11 +103,6 @@ function landOnProperty(player){
         }
         else{            
             var owner = null;
-            //for(let player of players){
-            //    if(player.ownedSpaces.indexOf(space.name) > -1){
-            //        owner = player;
-            //    }
-            //}
             for(let player of players){
                 for(let ownedSpace of player.ownedSpaces){
                     if(ownedSpace.name = space.name){
@@ -123,7 +112,7 @@ function landOnProperty(player){
             }
             var landingPrice = space.landPrice[space.houseCount];
             if(landingPrice > curPlayer.bank){
-                alert(curPlayer.dispName + ' is broke as fuck');
+                alert(curPlayer.dispName + ' can\'t afford that');
             }
             else{
                 alterBank(curPlayer,-1*landingPrice);
@@ -133,12 +122,9 @@ function landOnProperty(player){
         }
     }
     else if(space.name == 'Community Chest'){
-        //document.getElementById('playerAlerts').innerHTML = 'Draw Community Chest';
         communityChestCards[Math.floor(Math.random() * communityChestCards.length)].action(curPlayer);
     }
     else if(space.name == 'Chance'){
-        //document.getElementById('playerAlerts').innerHTML = 'Draw Chance';
-
         chanceCards[Math.floor(Math.random() * chanceCards.length)].action(curPlayer);
     }
     else if(space.name == 'Income Tax'){
@@ -177,9 +163,16 @@ function movePlayer(player){
     document.getElementById(player.name).style.left = (spaces[player.space].left) + (player.offset)  + 'px';
     document.getElementById(player.name).style.top = spaces[player.space].top + spaceSize/2 + 'px';
 }
-function goBankrupt(){
-    
+
+//TODO: make sure this is the cleanest way to do this
+function goBankrupt(removePlayer){
+    for(var i = 0; i < players.length; i++){
+        if(players[i] == removePlayer){
+            players.splice(i,0);
+        }
+    }
 }
+
 function closePropertyDialogue(){
     document.getElementById('propertyOptions').remove();
 }
