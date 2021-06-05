@@ -10,8 +10,8 @@ function Player(name,dispName,offset,color,playerIndex){
     this.inJail = false;
     this.getOutOfJailFreeCount = 0;
     this.playerPiece = '<div id="'+name+'" style="border: 1px solid black; width:10px;height:10px; position:absolute;left:'
-        +(spaces[0].left + offset)+'px;top:'
-        +(spaces[0].top + spaceSize/2)+'px;background-color:'+color.toString()+';"></div>';
+        +((spaces[0].leftPos*spaceSize) + offset)+'px;top:'
+        +((spaces[0].topPos*spaceSize) + spaceSize/2)+'px;background-color:'+color.toString()+';"></div>';
     this.bankrollInfo = '<div id="'+name+'Bankroll"'
     +'style="border: 1px solid black; font-weight:bold; font-size:40px; width:'+spaceSize*5+'px;height:'+spaceSize+'px; position:absolute;left:'
     +spaceSize*11+'px;top:'
@@ -105,12 +105,12 @@ function landOnProperty(player){
             var owner = null;
             for(let player of players){
                 for(let ownedSpace of player.ownedSpaces){
-                    if(ownedSpace.name = space.name){
+                    if(ownedSpace.spaceName == space.spaceName){
                         owner = player;
                     }
                 }
             }
-            var landingPrice = space.landPrice[space.houseCount];
+            var landingPrice = space.landPrice;
             if(landingPrice > curPlayer.bank){
                 alert(curPlayer.dispName + ' can\'t afford that');
             }
@@ -160,8 +160,8 @@ function alterBank(player, amount){
     document.getElementById(player.name+'Bankroll').innerHTML = player.dispName + ': ' + player.bank;
 }
 function movePlayer(player){
-    document.getElementById(player.name).style.left = (spaces[player.space].left) + (player.offset)  + 'px';
-    document.getElementById(player.name).style.top = spaces[player.space].top + spaceSize/2 + 'px';
+    document.getElementById(player.name).style.left = (spaces[player.space].leftPos*spaceSize) + (player.offset)  + 'px';
+    document.getElementById(player.name).style.top = (spaces[player.space].topPos*spaceSize) + spaceSize/2 + 'px';
 }
 
 //TODO: make sure this is the cleanest way to do this
@@ -180,7 +180,7 @@ function openPropertyDialogue(){
     var propertyOptionsDiv = '<div id="propertyOptions" style="'
     +'display:block;border:1px solid black; background-color:#fff2ab; position:absolute; width:'+spaceSize*9+'px; height:'+spaceSize*9+'px; top:'+spaceSize+'px; left:'+spaceSize+'px'
     +'">'
-    +'<p style="font-size:70px; text-align:center;">Would you like to purchase '+spaces[curPlayer.space].name+'?</p>'
+    +'<p style="font-size:70px; text-align:center;">Would you like to purchase '+spaces[curPlayer.space].spaceName+'?</p>'
     +'<button style="width:50%; Height:30%; font-size:50px" onclick="buySpace()">Yes</button>'
     +'<button style="width:50%; Height:30%; font-size:50px" onclick="closePropertyDialogue()">No</button>'
     +'</div>'

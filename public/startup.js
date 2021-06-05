@@ -28,7 +28,9 @@ function setupBoard(){
     var boardDiv = '<div style="position: absolute; left:0px; top: 0px; width:'+(spaceSize*11+1)+'px; height:'
         +(spaceSize*11+1)+'px; background-color: #BFDBAE"></div>';
     document.getElementById('body').innerHTML += boardDiv;
+    console.log(spaces);
     for(let space of spaces){
+        console.log('asdf');
         createSquare(space);
     }
     addUI();
