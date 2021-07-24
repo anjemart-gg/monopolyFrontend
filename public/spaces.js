@@ -1,5 +1,4 @@
 function createSquare(space){
-    console.log(space);
     if(space.location < 11){
         var rotationText = '';
     }
@@ -14,22 +13,14 @@ function createSquare(space){
     }
     var divText = '<div id="'+space.location+'" style="'+rotationText+'border:1px solid black;position:absolute;height:'+spaceSize+'px;width:'
         +spaceSize+'px;top:'+space.topPos*spaceSize+'px;left:'+space.leftPos*spaceSize+'px;overflow-wrap: break-word; font-size:12px;text-align: center;">';
-    if(typeof(space.propertyGrouping) != 'undefined'){
+    if(space.propertyGrouping != null){
         var divOrientation = 'height:30%; width:97%;';
         
         divText += '<div style=" border: 1px solid black; overflow: none;'+divOrientation+' background-color:'+groupingColors[space.propertyGrouping]+';"></div>'
     }
+
     divText += space.spaceName+'</div>';
     document.getElementById('body').innerHTML += divText;
-    console.log(space.spaceName);
-}
-
-async function httpGet(theUrl)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, true );
-    xmlHttp.send( null );
-    return xmlHttp.responseText;
 }
 
 var groupingColors = [
@@ -44,19 +35,44 @@ var groupingColors = [
 ];
 var spaces = [];
 
-var request = new XMLHttpRequest()
+let content = {
+    "query" : `{
+        getSpaces(boardGroup: 1){
+          id
+          spaceName
+          price
+          owner
+          houseCount
+          hotelCount
+          landPrice
+          houseMultiplier
+          hotelMultiplier
+          mortgageValue
+          propertyGrouping
+          leftPos
+          topPos
+          boardGroup
+          location
+        }
+      }
+    `
+    }
+    let body = JSON.stringify(content);
 
-request.open('GET', 'http://localhost:8765/getSpaceInfo', false)
-request.onload = function () {
-  var data = JSON.parse(this.response)
 
-  if (request.status >= 200 && request.status < 400) {
-    data.forEach((space) => {
-        spaces.push(space);
+function getBoardData() {
+    return fetch('http://localhost:8765/graphql', {
+        method: 'post',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: body
     })
-  } else {
-    console.log('error')
-  }
+    .then(response => response.json())
+    .then(response => {
+        response.data.getSpaces.forEach(space => {
+            console.log(space);
+            spaces.push(space);
+        });
+    });
 }
-
-request.send();

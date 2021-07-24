@@ -86,7 +86,7 @@ function rollDice(){
 }
 function landOnProperty(player){
     var space = spaces[player.space];
-    if(space.name == 'Go To Jail'){
+    if(space.spaceName == 'Go To Jail'){
         if(curPlayer.getOutOfJailFreeCount > 0){
             document.getElementById('playerAlerts').innerHTML = 'Get Out of Jail Free card used';
             curPlayer.getOutOfJailFreeCount--;
@@ -96,7 +96,7 @@ function landOnProperty(player){
             goToJail(curPlayer);
         }
     }
-    else if(typeof(space.price) != 'undefined'){
+    else if(space.price != null){
         if(space.owner == null){
             openPropertyDialogue();
             document.getElementById('playerAlerts').innerHTML = '';
@@ -121,18 +121,18 @@ function landOnProperty(player){
             document.getElementById('playerAlerts').innerHTML = curPlayer.dispName + ' pays ' + owner.dispName;
         }
     }
-    else if(space.name == 'Community Chest'){
+    else if(space.spaceName == 'Community Chest'){
         communityChestCards[Math.floor(Math.random() * communityChestCards.length)].action(curPlayer);
     }
-    else if(space.name == 'Chance'){
+    else if(space.spaceName == 'Chance'){
         chanceCards[Math.floor(Math.random() * chanceCards.length)].action(curPlayer);
     }
-    else if(space.name == 'Income Tax'){
+    else if(space.spaceName == 'Income Tax'){
         console.log('Income Tax');
         document.getElementById('playerAlerts').innerHTML = 'Income Tax';
         alterBank(curPlayer,-200);
     }
-    else if(space.name == 'Luxury Tax'){
+    else if(space.spaceName == 'Luxury Tax'){
         console.log('Luxury Tax');
         document.getElementById('playerAlerts').innerHTML = 'Luxury Tax';
         alterBank(curPlayer,-75);

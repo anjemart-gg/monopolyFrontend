@@ -4,14 +4,6 @@
     <script src="global.js"></script>
     <script src="spaces.js"></script>
     <script src="player.js"></script>
-    <script type="text/javascript">
-       var playerDistance = 5;
-       var players = [];
-       players.push(new Player('player1','Player 1',playerDistance,'red',0));
-       players.push(new Player('player2','Player 2',(spaceSize/4 + playerDistance),'blue',1));
-       players.push(new Player('player3','Player 3',(spaceSize/4*2 + playerDistance),'yellow',2));
-       players.push(new Player('player4','Player 4',(spaceSize/4*3 + playerDistance),'green',3));
-    </script>
     <script src="startup.js"></script>
 </head>
 <body onload="setupBoard()" id="body" style="background-color: #a9c4bf">
